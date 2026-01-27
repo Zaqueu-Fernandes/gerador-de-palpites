@@ -214,17 +214,29 @@
             const res = document.getElementById('result-bicho');
             res.classList.remove('hidden');
             
+            // 1. Sorteia o Bicho primeiro para mandar na regra
             let bichoAleatorio = bichos[Math.floor(Math.random() * bichos.length)];
+            
+            // 2. Pega as dezenas dele e escolhe uma aleatória
+            const dezenasArray = bichoAleatorio.d.split(', ');
+            let dezenaSorteada = dezenasArray[Math.floor(Math.random() * dezenasArray.length)];
+            
             let numPalpite = "";
 
-            // Lógica de geração baseada no tipo de aposta
-            if(tipo === 'milhar') numPalpite = Math.floor(Math.random() * 9000 + 1000);
-            else if(tipo === 'centena') numPalpite = Math.floor(Math.random() * 900 + 100);
+            if(tipo === 'milhar') {
+                // Gera os dois primeiros dígitos (00 a 99) e concatena com a dezena do bicho
+                let prefixo = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+                numPalpite = prefixo + dezenaSorteada;
+            } 
+            else if(tipo === 'centena') {
+                // Gera o primeiro dígito (0 a 9) e concatena com a dezena do bicho
+                let prefixo = Math.floor(Math.random() * 10).toString();
+                numPalpite = prefixo + dezenaSorteada;
+            } 
             else if(tipo === 'dezena') {
-                // Para dezena, pegamos uma das 4 dezenas reais do bicho sorteado
-                const dezenasArray = bichoAleatorio.d.split(', ');
-                numPalpite = dezenasArray[Math.floor(Math.random() * dezenasArray.length)];
-            } else {
+                numPalpite = dezenaSorteada;
+            } 
+            else {
                 numPalpite = bichoAleatorio.n;
             }
 
