@@ -2,14 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gerador de Palpites - Zaqueu Fernandes</title>
     <style>
         :root {
             --caixa-blue: #005ca9;
             --caixa-light: #00a4e0;
             --bicho-green: #2d5a27;
-            --bicho-leaf: #a8dadc;
             --gold: #ffab00;
             --white: #ffffff;
         }
@@ -21,8 +20,8 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            background: #e0e0e0;
+            height: 100vh; /* Ocupa a altura total da tela */
+            overflow: hidden; /* Evita scroll na home */
         }
 
         /* Fundos Dinâmicos */
@@ -33,75 +32,67 @@
         .container {
             width: 95%;
             max-width: 500px;
-            margin: auto;
+            margin: auto auto 10px auto; /* Empurra o conteúdo para cima do rodapé */
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
             color: #333;
         }
 
-        .bg-caixa .container, .bg-bicho .container { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        /* Telas de jogo permitem scroll interno se o resultado for longo */
+        #screen-caixa, #screen-bicho {
+            overflow-y: auto;
+            max-height: 85vh;
+        }
 
-        /* Estilo e Animações do Trevo */
+        .bg-caixa .container, .bg-bicho .container { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(10px); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+        }
+
+        /* Animação do Trevo na Home */
         .lucky-icon { 
             font-size: 80px; 
-            margin-bottom: 20px; 
+            margin-bottom: 10px; 
             display: inline-block;
             animation: intro-lucky 3s ease-out forwards, pulse-soft 2s infinite 3s ease-in-out;
         }
 
-        /* Animação Inicial: Gira e Cresce */
         @keyframes intro-lucky {
-            0% { 
-                transform: scale(0) rotate(0deg); 
-                opacity: 0;
-            }
-            60% { 
-                transform: scale(1.5) rotate(720deg); 
-                opacity: 1;
-            }
-            100% { 
-                transform: scale(1) rotate(1080deg); 
-            }
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            60% { transform: scale(1.4) rotate(720deg); opacity: 1; }
+            100% { transform: scale(1) rotate(1080deg); }
         }
 
-        /* Animação Contínua: Pulsação suave */
         @keyframes pulse-soft {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255,171,0,0)); }
             50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(255,171,0,0.5)); }
         }
 
-        /* Ajuste extra para deixar os botões da Home mais modernos */
-        #screen-home .btn-main, #screen-home .btn-bicho {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.1);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-        
-        h1 { font-size: 1.8rem; margin: 10px 0; }
-        .description { font-size: 0.9rem; opacity: 0.8; margin-bottom: 25px; }
+        h1 { font-size: 1.7rem; margin: 10px 0; }
+        .description { font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px; }
 
-        /* Inputs e Selects Padronizados */
+        /* Inputs e Botões */
         select, input {
             width: 100%;
-            height: 50px;
+            height: 48px;
             padding: 0 15px;
-            margin: 10px 0;
+            margin: 8px 0;
             border-radius: 10px;
-            border: 2px solid transparent;
+            border: none;
             font-size: 1rem;
-            outline: none;
         }
 
-        label { display: block; text-align: left; font-weight: bold; margin-top: 10px; font-size: 0.9rem; }
+        label { display: block; text-align: left; font-weight: bold; margin-top: 10px; font-size: 0.85rem; }
 
         .btn-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 
         button {
-            height: 55px;
+            height: 52px;
             border: none;
             border-radius: 10px;
             font-weight: bold;
@@ -109,31 +100,31 @@
             text-transform: uppercase;
         }
 
-        .btn-main { background: var(--caixa-blue); color: white; width: 100%; margin-bottom: 10px; }
-        .btn-bicho { background: #1b5e20; color: white; width: 100%; }
+        .btn-main { background: var(--caixa-blue); color: white; width: 100%; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-bicho { background: #1b5e20; color: white; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .btn-generate { background: var(--gold); color: #000; }
         .btn-clear { background: #ff5252; color: white; }
-        .btn-back { background: rgba(255,255,255,0.2); color: white; margin-top: 20px; width: 100%; border: 1px solid white; }
+        .btn-back { background: rgba(255,255,255,0.2); color: white; margin-top: 15px; width: 100%; border: 1px solid white; }
 
         .result-box {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 15px;
+            padding: 15px;
             background: rgba(255,255,255,0.2);
             border-radius: 15px;
-            min-height: 50px;
         }
 
-        .bicho-img { font-size: 80px; display: block; margin: 10px 0; animation: bounce 1s infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+        .bicho-img { font-size: 70px; display: block; margin: 5px 0; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
 
         footer {
-            padding: 20px;
+            padding: 10px 0 20px 0;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             width: 100%;
+            color: inherit;
         }
-        hr { width: 60%; border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin-bottom: 10px; }
-        .bg-caixa hr, .bg-bicho hr { border-top-color: rgba(255,255,255,0.3); }
+        hr { width: 50%; border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 0 auto 8px auto; }
+        .bg-caixa hr, .bg-bicho hr, .bg-home hr { border-top-color: rgba(255,255,255,0.3); color: white;}
 
         .hidden { display: none; }
     </style>
@@ -177,10 +168,10 @@
         
         <label>Tipo de Jogo</label>
         <select id="tipo-bicho">
-            <option value="grupo">Grupo (Bicho)</option>
             <option value="milhar">Milhar</option>
             <option value="centena">Centena</option>
             <option value="dezena">Dezena</option>
+            <option value="grupo">Grupo (Bicho)</option>
         </select>
 
         <div class="btn-group-row">
@@ -192,7 +183,7 @@
         <button class="btn-back" onclick="changeScreen('screen-home', 'bg-home')">Voltar</button>
     </div>
 
-    <footer>
+    <footer id="main-footer">
         <hr>
         © Copyright 2026: Zaqueu Fernandes (88) 9.9401-4262
     </footer>
@@ -218,6 +209,8 @@
             document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
             document.getElementById('body-bg').className = bgClass;
+            // Ajusta cor do footer para contraste
+            document.getElementById('main-footer').style.color = bgClass === 'bg-home' ? 'white' : 'white';
         }
 
         function limpar(divId) {
@@ -240,7 +233,7 @@
                 let nums = new Set();
                 while(nums.size < conf[jogo]) nums.add(Math.floor(Math.random() * max[jogo]) + 1);
                 let sorted = Array.from(nums).sort((a,b)=>a-b).map(n=>n.toString().padStart(2,'0'));
-                res.innerHTML += `<p>Jogo ${i}: <strong>${sorted.join(' ')}</strong></p>`;
+                res.innerHTML += `<p style="margin:8px 0;">Jogo ${i}: <strong>${sorted.join(' ')}</strong></p>`;
             }
         }
 
@@ -249,36 +242,28 @@
             const res = document.getElementById('result-bicho');
             res.classList.remove('hidden');
             
-            // 1. Sorteia o Bicho primeiro para mandar na regra
             let bichoAleatorio = bichos[Math.floor(Math.random() * bichos.length)];
-            
-            // 2. Pega as dezenas dele e escolhe uma aleatória
             const dezenasArray = bichoAleatorio.d.split(', ');
             let dezenaSorteada = dezenasArray[Math.floor(Math.random() * dezenasArray.length)];
             
             let numPalpite = "";
 
             if(tipo === 'milhar') {
-                // Gera os dois primeiros dígitos (00 a 99) e concatena com a dezena do bicho
                 let prefixo = Math.floor(Math.random() * 100).toString().padStart(2, '0');
                 numPalpite = prefixo + dezenaSorteada;
-            } 
-            else if(tipo === 'centena') {
-                // Gera o primeiro dígito (0 a 9) e concatena com a dezena do bicho
+            } else if(tipo === 'centena') {
                 let prefixo = Math.floor(Math.random() * 10).toString();
                 numPalpite = prefixo + dezenaSorteada;
-            } 
-            else if(tipo === 'dezena') {
+            } else if(tipo === 'dezena') {
                 numPalpite = dezenaSorteada;
-            } 
-            else {
+            } else {
                 numPalpite = bichoAleatorio.n;
             }
 
             res.innerHTML = `
                 <span class="bicho-img">${bichoAleatorio.e}</span>
                 <p style="font-size:1.6rem; margin: 5px 0;">Palpite: <strong>${numPalpite}</strong></p>
-                <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px;">
+                <div style="background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px;">
                     <span style="display:block; font-weight: bold; color: var(--gold);">${bichoAleatorio.n}</span>
                     <small>Dezenas do Grupo: ${bichoAleatorio.d}</small>
                 </div>
