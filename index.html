@@ -44,7 +44,42 @@
 
         .bg-caixa .container, .bg-bicho .container { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255,255,255,0.3); }
 
-        .lucky-icon { font-size: 50px; margin-bottom: 10px; display: block; }
+        /* Estilo e Animações do Trevo */
+        .lucky-icon { 
+            font-size: 80px; 
+            margin-bottom: 20px; 
+            display: inline-block;
+            animation: intro-lucky 3s ease-out forwards, pulse-soft 2s infinite 3s ease-in-out;
+        }
+
+        /* Animação Inicial: Gira e Cresce */
+        @keyframes intro-lucky {
+            0% { 
+                transform: scale(0) rotate(0deg); 
+                opacity: 0;
+            }
+            60% { 
+                transform: scale(1.5) rotate(720deg); 
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1) rotate(1080deg); 
+            }
+        }
+
+        /* Animação Contínua: Pulsação suave */
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255,171,0,0)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(255,171,0,0.5)); }
+        }
+
+        /* Ajuste extra para deixar os botões da Home mais modernos */
+        #screen-home .btn-main, #screen-home .btn-bicho {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.1);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
         
         h1 { font-size: 1.8rem; margin: 10px 0; }
         .description { font-size: 0.9rem; opacity: 0.8; margin-bottom: 25px; }
@@ -106,7 +141,7 @@
 <body id="body-bg" class="bg-home">
 
     <div class="container" id="screen-home">
-        <span class="lucky-icon">🍀</span>
+        <div class="lucky-icon">🍀</div>
         <h1>Gerador de Palpites</h1>
         <p class="description">Gere palpites quentes para jogos das loterias da caixa e Jogo do Bicho</p>
         
