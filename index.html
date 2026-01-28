@@ -8,7 +8,7 @@
         :root {
             --caixa-blue: #005ca9;
             --caixa-light: #00a4e0;
-            --bicho-green: #2d5a27;
+            --bicho-green: #1b5e20;
             --gold: #ffab00;
             --white: #ffffff;
         }
@@ -20,8 +20,12 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Ocupa a altura total da tela */
-            overflow: hidden; /* Evita scroll na home */
+            justify-content: center; /* Centraliza o conteúdo principal */
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
         }
 
         /* Fundos Dinâmicos */
@@ -30,21 +34,22 @@
         .bg-bicho { background: radial-gradient(circle, #4db6ac, #2d5a27); color: white; }
 
         .container {
-            width: 95%;
-            max-width: 500px;
-            margin: auto auto 10px auto; /* Empurra o conteúdo para cima do rodapé */
+            width: 92%;
+            max-width: 450px;
             background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
             color: #333;
+            z-index: 2;
+            margin-bottom: 80px; /* Garante que o container não cubra o rodapé elevado */
         }
 
-        /* Telas de jogo permitem scroll interno se o resultado for longo */
+        /* Ajuste para telas de jogo */
         #screen-caixa, #screen-bicho {
             overflow-y: auto;
-            max-height: 85vh;
+            max-height: 70vh;
         }
 
         .bg-caixa .container, .bg-bicho .container { 
@@ -54,9 +59,9 @@
             border: 1px solid rgba(255,255,255,0.3); 
         }
 
-        /* Animação do Trevo na Home */
+        /* Animação do Trevo */
         .lucky-icon { 
-            font-size: 80px; 
+            font-size: 70px; 
             margin-bottom: 10px; 
             display: inline-block;
             animation: intro-lucky 3s ease-out forwards, pulse-soft 2s infinite 3s ease-in-out;
@@ -69,30 +74,28 @@
         }
 
         @keyframes pulse-soft {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255,171,0,0)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(255,171,0,0.5)); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(255,171,0,0.5)); }
         }
 
-        h1 { font-size: 1.7rem; margin: 10px 0; }
-        .description { font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px; }
+        h1 { font-size: 1.6rem; margin: 5px 0; }
+        .description { font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px; }
 
-        /* Inputs e Botões */
         select, input {
             width: 100%;
-            height: 48px;
+            height: 45px;
             padding: 0 15px;
-            margin: 8px 0;
+            margin: 5px 0;
             border-radius: 10px;
             border: none;
             font-size: 1rem;
         }
 
-        label { display: block; text-align: left; font-weight: bold; margin-top: 10px; font-size: 0.85rem; }
-
+        label { display: block; text-align: left; font-weight: bold; margin-top: 10px; font-size: 0.8rem; }
         .btn-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 
         button {
-            height: 52px;
+            height: 50px;
             border: none;
             border-radius: 10px;
             font-weight: bold;
@@ -100,31 +103,49 @@
             text-transform: uppercase;
         }
 
-        .btn-main { background: var(--caixa-blue); color: white; width: 100%; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .btn-bicho { background: #1b5e20; color: white; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-main { background: var(--caixa-blue); color: white; width: 100%; margin-bottom: 10px; }
+        .btn-bicho { background: var(--bicho-green); color: white; width: 100%; }
         .btn-generate { background: var(--gold); color: #000; }
         .btn-clear { background: #ff5252; color: white; }
         .btn-back { background: rgba(255,255,255,0.2); color: white; margin-top: 15px; width: 100%; border: 1px solid white; }
 
         .result-box {
             margin-top: 15px;
-            padding: 15px;
+            padding: 12px;
             background: rgba(255,255,255,0.2);
-            border-radius: 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
         }
 
-        .bicho-img { font-size: 70px; display: block; margin: 5px 0; animation: bounce 1s infinite alternate; }
+        .bicho-img { font-size: 60px; display: block; margin: 5px 0; animation: bounce 1s infinite alternate; }
         @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
 
+        /* RODAPÉ ELEVADO E FIXO */
         footer {
-            padding: 10px 0 20px 0;
-            text-align: center;
-            font-size: 0.8rem;
+            position: fixed;
+            bottom: 40px; /* Eleva o texto e a linha para cima */
+            left: 0;
             width: 100%;
-            color: inherit;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none; /* Garante que não atrapalhe cliques */
         }
-        hr { width: 50%; border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 0 auto 8px auto; }
-        .bg-caixa hr, .bg-bicho hr, .bg-home hr { border-top-color: rgba(255,255,255,0.3); color: white;}
+
+        footer hr { 
+            width: 50%; 
+            border: 0; 
+            border-top: 1px solid rgba(255,255,255,0.4); 
+            margin: 0 auto 8px auto; 
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .bg-home footer hr { border-top-color: rgba(255,255,255,0.5); }
 
         .hidden { display: none; }
     </style>
@@ -134,7 +155,7 @@
     <div class="container" id="screen-home">
         <div class="lucky-icon">🍀</div>
         <h1>Gerador de Palpites</h1>
-        <p class="description">Gere palpites quentes para jogos das loterias da caixa e Jogo do Bicho</p>
+        <p class="description">Gere palpites quentes para loterias da caixa e Jogo do Bicho</p>
         
         <button class="btn-main" onclick="changeScreen('screen-caixa', 'bg-caixa')">Loterias da Caixa</button>
         <button class="btn-bicho" onclick="changeScreen('screen-bicho', 'bg-bicho')">Jogo do Bicho</button>
@@ -151,7 +172,7 @@
             <option value="lotomania">Lotomania</option>
         </select>
 
-        <label>Escolha a quantidade de cartões a ser gerado</label>
+        <label>Quantidade de cartões</label>
         <input type="number" id="qtd-caixa" min="1" max="10" value="1">
 
         <div class="btn-group-row">
@@ -183,9 +204,9 @@
         <button class="btn-back" onclick="changeScreen('screen-home', 'bg-home')">Voltar</button>
     </div>
 
-    <footer id="main-footer">
+    <footer>
         <hr>
-        © Copyright 2026: Zaqueu Fernandes (88) 9.9401-4262
+        <p>© Copyright 2026: Zaqueu Fernandes (88) 9.9401-4262</p>
     </footer>
 
     <script>
@@ -209,8 +230,6 @@
             document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
             document.getElementById('body-bg').className = bgClass;
-            // Ajusta cor do footer para contraste
-            document.getElementById('main-footer').style.color = bgClass === 'bg-home' ? 'white' : 'white';
         }
 
         function limpar(divId) {
@@ -225,15 +244,13 @@
             const res = document.getElementById('result-caixa');
             res.innerHTML = '';
             res.classList.remove('hidden');
-
             const conf = { megasena: 6, lotofacil: 15, quina: 5, lotomania: 50 };
             const max = { megasena: 60, lotofacil: 25, quina: 80, lotomania: 99 };
-
             for(let i=1; i<=qtd; i++) {
                 let nums = new Set();
                 while(nums.size < conf[jogo]) nums.add(Math.floor(Math.random() * max[jogo]) + 1);
                 let sorted = Array.from(nums).sort((a,b)=>a-b).map(n=>n.toString().padStart(2,'0'));
-                res.innerHTML += `<p style="margin:8px 0;">Jogo ${i}: <strong>${sorted.join(' ')}</strong></p>`;
+                res.innerHTML += `<p style="margin:5px 0;">Jogo ${i}: <strong>${sorted.join(' ')}</strong></p>`;
             }
         }
 
@@ -241,33 +258,17 @@
             const tipo = document.getElementById('tipo-bicho').value;
             const res = document.getElementById('result-bicho');
             res.classList.remove('hidden');
-            
-            let bichoAleatorio = bichos[Math.floor(Math.random() * bichos.length)];
-            const dezenasArray = bichoAleatorio.d.split(', ');
-            let dezenaSorteada = dezenasArray[Math.floor(Math.random() * dezenasArray.length)];
-            
-            let numPalpite = "";
-
-            if(tipo === 'milhar') {
-                let prefixo = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-                numPalpite = prefixo + dezenaSorteada;
-            } else if(tipo === 'centena') {
-                let prefixo = Math.floor(Math.random() * 10).toString();
-                numPalpite = prefixo + dezenaSorteada;
-            } else if(tipo === 'dezena') {
-                numPalpite = dezenaSorteada;
-            } else {
-                numPalpite = bichoAleatorio.n;
-            }
-
-            res.innerHTML = `
-                <span class="bicho-img">${bichoAleatorio.e}</span>
-                <p style="font-size:1.6rem; margin: 5px 0;">Palpite: <strong>${numPalpite}</strong></p>
-                <div style="background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px;">
-                    <span style="display:block; font-weight: bold; color: var(--gold);">${bichoAleatorio.n}</span>
-                    <small>Dezenas do Grupo: ${bichoAleatorio.d}</small>
-                </div>
-            `;
+            let b = bichos[Math.floor(Math.random() * bichos.length)];
+            const dArr = b.d.split(', ');
+            let dSor = dArr[Math.floor(Math.random() * dArr.length)];
+            let nP = "";
+            if(tipo === 'milhar') nP = Math.floor(Math.random() * 100).toString().padStart(2,'0') + dSor;
+            else if(tipo === 'centena') nP = Math.floor(Math.random() * 10).toString() + dSor;
+            else if(tipo === 'dezena') nP = dSor;
+            else nP = b.n;
+            res.innerHTML = `<span class="bicho-img">${b.e}</span><p style="font-size:1.4rem; margin: 5px 0;">Palpite: <strong>${nP}</strong></p>
+                <div style="background: rgba(0,0,0,0.15); padding: 8px; border-radius: 8px;"><span style="display:block; font-weight: bold; color: var(--gold);">${b.n}</span>
+                <small>Dezenas: ${b.d}</small></div>`;
         }
     </script>
 </body>
